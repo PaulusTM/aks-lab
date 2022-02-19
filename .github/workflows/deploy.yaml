@@ -41,4 +41,4 @@ jobs:
         uses: Azure/cli@1.0.4
         with:
           inlineScript: |
-            az deployment group create --template-file ./main.json
+            az deployment sub create --name akslab --location westeurope --template-file ./main.json

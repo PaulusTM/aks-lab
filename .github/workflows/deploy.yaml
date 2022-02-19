@@ -23,6 +23,7 @@ jobs:
         uses: actions/upload-artifact@v2.2.4
         with:
           path: ./main.json
+          name: template
           if-no-files-found: error
   deploy:
     runs-on: ubuntu-latest
@@ -35,7 +36,7 @@ jobs:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - uses: actions/download-artifact@v2
         with:
-          name: my-artifact
+          name: template
       - name: Deploy bicep to Azure
         uses: Azure/cli@1.0.4
         with:

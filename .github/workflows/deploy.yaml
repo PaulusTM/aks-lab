@@ -9,36 +9,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  infra-build:
     runs-on: ubuntu-latest
-    name: "Build"
+    name: "infra-build"
     steps:
       - uses: actions/checkout@v2
       - name: build Bicep file
-        uses: Azure/cli@1.0.4
+        uses: Azure/cli@1.0.6
         with:
           inlineScript: |
-            az bicep build --file ./main.bicep --outfile ./main.json
+            az bicep build --file ./infra/main.bicep --outfile ./main.json
       - name: Upload the ARM template as a Build Artifact
         uses: actions/upload-artifact@v2.2.4
         with:
           path: ./main.json
-          name: template
+          name: arm-template
           if-no-files-found: error
-  deploy:
+  infra-deploy:
     runs-on: ubuntu-latest
     needs: [build]
     steps:
       - uses: actions/checkout@v2
       - name: Azure Login
-        uses: Azure/login@v1
+        uses: Azure/login@v1.0.6
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
       - uses: actions/download-artifact@v2
         with:
-          name: template
+          name: arm-template
       - name: Deploy bicep to Azure
-        uses: Azure/cli@1.0.4
+        uses: Azure/cli@1.0.6
         with:
           inlineScript: |
             az deployment sub create --name akslab --location westeurope --template-file ./main.json

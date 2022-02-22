@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build Bicep file
-        uses: Azure/cli@1
+        uses: azure/CLI@v1
         with:
           inlineScript: |
             az bicep build --file ./infra/main.bicep --outfile ./main.json
@@ -38,7 +38,7 @@ jobs:
         with:
           name: arm-template
       - name: Deploy bicep to Azure
-        uses: Azure/cli@1
+        uses: azure/CLI@v1
         with:
           inlineScript: |
             az deployment sub create --name akslab --location westeurope --template-file ./main.json

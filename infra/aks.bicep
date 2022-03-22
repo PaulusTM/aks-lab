@@ -13,6 +13,10 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' = {
   properties: {
     dnsPrefix: clusterName
     enableRBAC: true
+    networkProfile: {
+      networkPlugin: 'azure'
+      networkPolicy: 'azure'
+    }
     agentPoolProfiles: [
       {
         name: 'agentpool1'
@@ -22,5 +26,15 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-01-02-preview' = {
         mode: 'System'
       }
     ]
+    addonProfiles: {
+      azureKeyvaultSecretsProvider: {
+        enabled: true
+        config: {
+          enableSecretRotation: 'true'
+        }
+      }
+    }
   }
 }
+
+output identity object = aks.identity

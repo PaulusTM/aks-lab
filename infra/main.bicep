@@ -11,10 +11,23 @@ resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
 }
 
 module aks './aks.bicep' = {
-  name: '${resourcePrefix}cluster'
+  name: 'aks'
   scope: rg
   params: {
     location: location
     clusterName: resourcePrefix
   }
+}
+
+module vault 'vault.bicep' = {
+  name: 'vault'
+  scope: rg
+  params: {
+    location: location
+    vaultName: '${resourcePrefix}-vault-one'
+    aksIdentity: aks.outputs.identity
+  }
+  dependsOn: [
+    aks
+  ]
 }
